@@ -2,35 +2,37 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Para Mi Amiga</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital@0;1&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@400;700&display=swap');
 
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      margin: 0;
-      height: 100vh;
       background: #0f001a;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       position: relative;
+      touch-action: manipulation;
     }
 
     canvas { position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; }
 
     .notebook {
-      width: 720px;
-      max-width: 94vw;
-      height: 540px;
+      width: 92vw;
+      max-width: 460px;
+      height: 85vh;
+      max-height: 620px;
       background: #f8f1e9;
-      border: 16px solid #ff8ab3;
-      border-radius: 18px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+      border: 18px solid #ff8ab3;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
       position: relative;
-      overflow: hidden;
       z-index: 2;
+      overflow: hidden;
     }
 
     .spiral {
@@ -38,68 +40,45 @@
       left: 50%;
       top: -10px;
       bottom: -10px;
-      width: 26px;
-      background: repeating-linear-gradient(
-        #222 0px,
-        #222 14px,
-        #ddd 14px,
-        #ddd 22px
-      );
+      width: 28px;
+      background: repeating-linear-gradient(#222 0px, #222 16px, #ddd 16px, #ddd 26px);
       transform: translateX(-50%);
-      z-index: 20;
-      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+      z-index: 30;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.4);
     }
 
     .page {
       position: absolute;
-      width: 48%;
-      height: calc(100% - 40px);
+      width: 47%;
+      height: calc(100% - 50px);
+      top: 25px;
       background: #fffef5;
-      background-image: 
-        linear-gradient(#f0e9d8 1px, transparent 1px),
-        linear-gradient(90deg, #f0e9d8 1px, transparent 1px);
-      background-size: 20px 20px;
-      box-shadow: inset 0 0 25px rgba(0,0,0,0.1);
-      padding: 35px 28px;
-      overflow: hidden;
+      background-image: linear-gradient(#f0e9d8 1px, transparent 1px),
+                        linear-gradient(90deg, #f0e9d8 1px, transparent 1px);
+      background-size: 22px 22px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+      padding: 25px 20px;
       display: none;
       flex-direction: column;
+      border-radius: 8px;
     }
 
-    .left  { left: 20px; border-radius: 8px 4px 4px 8px; }
-    .right { right: 20px; border-radius: 4px 8px 8px 4px; }
+    .left  { left: 18px; }
+    .right { right: 18px; }
 
     .page.active { display: flex; }
 
     .photo {
       width: 100%;
-      height: 205px;
+      height: 195px;
       object-fit: cover;
       border-radius: 10px;
-      border: 6px solid #ffe6f0;
+      border: 5px solid #ffe6f0;
     }
 
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.8em;
-      text-align: center;
-      color: #c71585;
-      margin: 10px 0;
-    }
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      color: #c71585;
-      text-align: center;
-      margin: 8px 0 15px;
-    }
-    .text {
-      font-family: 'Playfair Display', serif;
-      line-height: 1.75;
-      color: #333;
-      font-size: 1.1em;
-      flex: 1;
-    }
+    h1 { font-family: 'Great Vibes', cursive; font-size: 2.4em; text-align:center; color:#c71585; }
+    h2 { font-family: 'Playfair Display', serif; font-style:italic; color:#c71585; text-align:center; margin:10px 0; }
+    .text { font-family: 'Playfair Display', serif; line-height:1.75; color:#333; font-size:1.05em; flex:1; }
 
     .portada {
       position: absolute;
@@ -110,9 +89,22 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 30;
-      border-radius: 10px;
+      z-index: 40;
+      border-radius: 12px;
       text-align: center;
+      padding: 20px;
+    }
+
+    button {
+      padding: 14px 32px;
+      font-size: 1.1em;
+      background: white;
+      color: #c71585;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      margin-top: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
   </style>
 </head>
@@ -126,60 +118,39 @@
     <!-- Portada -->
     <div class="portada" id="portada">
       <h1>Para Mi Amiga</h1>
-      <p style="font-size:1.4em; margin:20px 0;">Un regalo especial</p>
-      <img src="Foto1.jpg" style="width:68%; border:12px solid rgba(255,255,255,0.4); border-radius:12px;">
-      <button onclick="openBook()" style="margin-top:35px; padding:14px 40px; font-size:1.1em; background:white; color:#c71585; border:none; border-radius:50px; font-weight:bold;">Abrir Libro</button>
+      <p style="font-size:1.25em; margin:15px 0 25px;">Hecho especialmente para vos</p>
+      <img src="Foto1.jpg" style="width:75%; border-radius:12px; border:8px solid rgba(255,255,255,0.35);">
+      <button onclick="openBook()">Abrir el Libro ❤️</button>
     </div>
 
-    <!-- Página 1 (Izq: foto - Der: texto) -->
-    <div class="page left active" id="left1">
-      <h2>Te pido perdón</h2>
-      <img src="Foto1.jpg" class="photo">
-    </div>
-    <div class="page right active" id="right1">
-      <h2>Te pido perdón</h2>
-      <p class="text">Te extraño y quiero que me perdones, sé que soy un pelotudo... pero lo que te dije era todo mentira. Me duele que lo hayas tomado en serio y de verdad te pido perdón 💔</p>
-    </div>
+    <!-- Páginas -->
+    <div class="page left active" id="left1"><h2>Te pido perdón</h2><img src="Foto1.jpg" class="photo"></div>
+    <div class="page right active" id="right1"><h2>Te pido perdón</h2><p class="text">Te extraño y quiero que me perdones, sé que soy un pelotudo... pero lo que te dije era todo mentira. Me duele que lo hayas tomado en serio y de verdad te pido perdón 💔</p></div>
 
-    <!-- Página 2 -->
-    <div class="page left" id="left2">
-      <h2>Nuestra amistad</h2>
-      <img src="Foto2.jpg" class="photo">
-    </div>
-    <div class="page right" id="right2">
-      <h2>Nuestra amistad</h2>
-      <p class="text">Te conozco desde los 5 años y desde ahí nunca nos separamos. Aunque parezca que sos más grande que yo, jamás te dejé de lado por nadie... sos muy importante para mí ♥️</p>
-    </div>
+    <div class="page left" id="left2"><h2>Nuestra amistad</h2><img src="Foto2.jpg" class="photo"></div>
+    <div class="page right" id="right2"><h2>Nuestra amistad</h2><p class="text">Te conozco desde los 5 años y desde ahí nunca nos separamos. Aunque parezca que sos más grande que yo, jamás te dejé de lado por nadie... sos muy importante para mí ♥️</p></div>
 
-    <!-- Página 3 -->
-    <div class="page left" id="left3">
-      <h2>Perdón</h2>
-      <img src="Foto3.jpg" class="photo">
-    </div>
-    <div class="page right" id="right3">
-      <h2>Perdón</h2>
-      <p class="text">Perdón por todo lo que hice... pero yo te quiero mucho brother 🥺</p>
-    </div>
+    <div class="page left" id="left3"><h2>Perdón</h2><img src="Foto3.jpg" class="photo"></div>
+    <div class="page right" id="right3"><h2>Perdón</h2><p class="text">Perdón por todo lo que hice... pero yo te quiero mucho brother 🥺</p></div>
 
-    <!-- Página 4 -->
-    <div class="page left" id="left4">
-      <h2>Te admiro</h2>
-      <img src="Foto4.jpg" class="photo">
-    </div>
-    <div class="page right" id="right4">
-      <h2>Te admiro</h2>
-      <p class="text">Admiro lo fuerte que sos. Sos una persona muy trabajadora que, sin importar su situación, siempre sigue adelante. Y aunque tengas bajones, siempre te levantás... eso te hace increíble 💖</p>
-    </div>
+    <div class="page left" id="left4"><h2>Te admiro</h2><img src="Foto4.jpg" class="photo"></div>
+    <div class="page right" id="right4"><h2>Te admiro</h2><p class="text">Admiro lo fuerte que sos. Sos una persona muy trabajadora que, sin importar su situación, siempre sigue adelante. Y aunque tengas bajones, siempre te levantás... eso te hace increíble 💖</p></div>
   </div>
 
-  <audio id="music" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+  <audio id="music" loop preload="auto">
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
-    // Partículas
+    // Canvas partículas
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
 
     const particles = [];
     const symbols = ['❤️','💖','🍫','🍭','🍬','🌟'];
@@ -189,15 +160,15 @@
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height - canvas.height;
-        this.size = Math.random() * 26 + 17;
-        this.speed = Math.random() * 2.8 + 1.4;
-        this.symbol = symbols[Math.floor(Math.random()*symbols.length)];
+        this.size = Math.random() * 27 + 18;
+        this.speed = Math.random() * 3 + 1.5;
+        this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
       }
-      update() { this.y += this.speed; if(this.y > canvas.height) this.reset(); }
+      update() { this.y += this.speed; if (this.y > canvas.height) this.reset(); }
       draw() { ctx.font = `${this.size}px Arial`; ctx.fillText(this.symbol, this.x, this.y); }
     }
 
-    for(let i=0; i<48; i++) particles.push(new Particle());
+    for(let i = 0; i < 45; i++) particles.push(new Particle());
 
     function animate() {
       ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -206,15 +177,17 @@
     }
     animate();
 
-    let current = 0;
+    // Libro
     const music = document.getElementById('music');
 
     function openBook() {
       document.getElementById('portada').style.display = 'none';
       document.getElementById('left1').classList.add('active');
       document.getElementById('right1').classList.add('active');
-      music.play();
+      music.play().catch(() => console.log("Music autoplay blocked"));
     }
+
+    let current = 0;
 
     function nextPage() {
       current++;
@@ -236,11 +209,20 @@
       }
     }
 
-    // Swipe
+    // Swipe fácil
     let startX = 0;
-    document.querySelector('.notebook').addEventListener('touchstart', e => startX = e.touches[0].clientX);
-    document.querySelector('.notebook').addEventListener('touchend', e => {
-      if (e.changedTouches[0].clientX < startX - 60) nextPage();
+    const notebook = document.querySelector('.notebook');
+    notebook.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    notebook.addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (diff > 80) nextPage();
+    });
+
+    // Click en cualquier lado del libro para pasar página (más fácil en celular)
+    notebook.addEventListener('click', (e) => {
+      if (e.target.tagName === "BUTTON") return;
+      const rect = notebook.getBoundingClientRect();
+      if (e.clientX > rect.left + rect.width / 2) nextPage();
     });
   </script>
 </body>
