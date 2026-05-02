@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para el Amor de mi Vida</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #1a0033, #330033);
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+    }
+    .book-container {
+      width: 90vw;
+      max-width: 420px;
+      height: 85vh;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      overflow: hidden;
+      position: relative;
+    }
+    .book {
+      width: 100%;
+      height: 100%;
+      perspective: 1200px;
+      position: relative;
+    }
+    .page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #fdf4f8, #fff);
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      padding: 25px;
+      overflow-y: auto;
+    }
+    .page.active { display: flex; }
+    
+    .cover {
+      background: linear-gradient(135deg, #ff99cc, #ff6699);
+      color: white;
+      text-align: center;
+      justify-content: center;
+    }
+    .cover h1 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+    }
+    
+    .photo {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 15px 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .text {
+      font-size: 1.05em;
+      line-height: 1.5;
+      color: #333;
+      margin-top: 10px;
+    }
+    
+    .buttons {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 25px;
+    }
+    button {
+      background: #ff6699;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255,102,153,0.4);
+    }
+    button:hover { background: #ff3388; }
+
+    .stars {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: transparent;
+      pointer-events: none;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="book-container">
+    <div class="book">
+
+      <!-- Portada -->
+      <div class="page cover active" id="page0">
+        <div class="stars"></div>
+        <h1>Para el Amor de mi Vida</h1>
+        <p>He creado esta pequeña historia<br>para recordarte cuánto te amo...</p>
+        <img src="Foto1.jpg" class="photo" alt="Nosotros">
+        <button onclick="nextPage()">Abrir ❤️</button>
+      </div>
+
+      <!-- Página 1 -->
+      <div class="page" id="page1">
+        <h2 style="color:#ff6699; text-align:center;">Te extraño...</h2>
+        <img src="Foto1.jpg" class="photo" alt="Foto 1">
+        <p class="text">Te extraño y quiero que me perdones, sé que soy un pelotudo... pero lo que te dije era todo mentira. Me duele que lo hayas tomado en serio y de verdad te pido perdón 💔</p>
+        <div class="buttons">
+          <button onclick="prevPage()">Anterior</button>
+          <button onclick="nextPage()">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Página 2 -->
+      <div class="page" id="page2">
+        <h2 style="color:#ff6699; text-align:center;">Nuestra Historia</h2>
+        <img src="Foto2.jpg" class="photo" alt="Foto 2">
+        <p class="text">Te conozco desde los 5 años y desde ahí nunca nos separamos. Aunque parezca que sos más grande que yo, jamás te dejé de lado por nadie... sos muy importante para mí ♥️</p>
+        <div class="buttons">
+          <button onclick="prevPage()">Anterior</button>
+          <button onclick="nextPage()">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Página 3 -->
+      <div class="page" id="page3">
+        <h2 style="color:#ff6699; text-align:center;">Perdón</h2>
+        <img src="Foto3.jpg" class="photo" alt="Foto 3">
+        <p class="text">Perdón por todo lo que hice... pero yo te quiero mucho brother 🥺</p>
+        <div class="buttons">
+          <button onclick="prevPage()">Anterior</button>
+          <button onclick="nextPage()">Siguiente →</button>
+        </div>
+      </div>
+
+      <!-- Página 4 -->
+      <div class="page" id="page4">
+        <h2 style="color:#ff6699; text-align:center;">Te admiro</h2>
+        <img src="Foto4.jpg" class="photo" alt="Foto 4">
+        <p class="text">Admiro lo fuerte que sos. Sos una persona muy trabajadora que, sin importar su situación, siempre sigue adelante. Y aunque tengas bajones, siempre te levantás... eso te hace increíble 💖</p>
+        <div class="buttons">
+          <button onclick="prevPage()">Anterior</button>
+          <button onclick="showEnd()">Finalizar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    let currentPage = 0;
+    const pages = document.querySelectorAll('.page');
+    const music = document.getElementById('bgMusic');
+
+    function showPage(n) {
+      pages.forEach(p => p.classList.remove('active'));
+      pages[n].classList.add('active');
+      currentPage = n;
+    }
+
+    function nextPage() {
+      if (currentPage < pages.length - 1) {
+        showPage(currentPage + 1);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        showPage(currentPage - 1);
+      }
+    }
+
+    function showEnd() {
+      alert("Te amo mucho. Gracias por estar en mi vida ❤️");
+      music.pause();
+    }
+
+    // Iniciar música al abrir
+    document.querySelector('button').addEventListener('click', () => {
+      music.play().catch(() => {});
+    }, { once: true });
+
+    // Soporte táctil (swipe)
+    let touchStartX = 0;
+    document.querySelector('.book-container').addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    document.querySelector('.book-container').addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) nextPage();
+      if (touchEndX > touchStartX + 50) prevPage();
+    });
+  </script>
+</body>
+            </html>
