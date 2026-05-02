@@ -2,110 +2,99 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Para Mi Amiga</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;600&display=swap');
 
-    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: #0f001a;
-      min-height: 100vh;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(#1a0033, #330022);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       position: relative;
-      touch-action: manipulation;
     }
 
     canvas { position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; }
 
     .notebook {
-      width: 92vw;
-      max-width: 460px;
-      height: 85vh;
-      max-height: 620px;
-      background: #f8f1e9;
-      border: 18px solid #ff8ab3;
+      width: 88vw;
+      max-width: 420px;
+      height: 68vh;
+      max-height: 460px;
+      background: #fff9f0;
+      border: 18px solid #ff4d94;
       border-radius: 20px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.75);
       position: relative;
       z-index: 2;
       overflow: hidden;
     }
 
-    .spiral {
-      position: absolute;
-      left: 50%;
-      top: -10px;
-      bottom: -10px;
-      width: 28px;
-      background: repeating-linear-gradient(#222 0px, #222 16px, #ddd 16px, #ddd 26px);
-      transform: translateX(-50%);
-      z-index: 30;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.4);
-    }
-
     .page {
       position: absolute;
-      width: 47%;
-      height: calc(100% - 50px);
-      top: 25px;
+      width: 50%;
+      height: calc(100% - 40px);
+      top: 20px;
       background: #fffef5;
-      background-image: linear-gradient(#f0e9d8 1px, transparent 1px),
-                        linear-gradient(90deg, #f0e9d8 1px, transparent 1px);
-      background-size: 22px 22px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.25);
-      padding: 25px 20px;
+      background-image: 
+        linear-gradient(#e8e0d0 1px, transparent 1px),
+        linear-gradient(90deg, #e8e0d0 1px, transparent 1px);
+      background-size: 18px 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4),
+                  inset 0 0 35px rgba(0,0,0,0.1);
+      padding: 20px 18px;
       display: none;
       flex-direction: column;
       border-radius: 8px;
+      transition: transform 1.4s cubic-bezier(0.7, 0, 0.3, 1);
     }
 
-    .left  { left: 18px; }
-    .right { right: 18px; }
+    .left  { left: 0; border-radius: 12px 4px 4px 12px; }
+    .right { right: 0; border-radius: 4px 12px 12px 4px; }
 
     .page.active { display: flex; }
 
     .photo {
       width: 100%;
-      height: 195px;
+      height: 135px;
       object-fit: cover;
       border-radius: 10px;
-      border: 5px solid #ffe6f0;
+      border: 5px solid #ffe0f0;
+      margin-bottom: 12px;
     }
 
-    h1 { font-family: 'Great Vibes', cursive; font-size: 2.4em; text-align:center; color:#c71585; }
-    h2 { font-family: 'Playfair Display', serif; font-style:italic; color:#c71585; text-align:center; margin:10px 0; }
-    .text { font-family: 'Playfair Display', serif; line-height:1.75; color:#333; font-size:1.05em; flex:1; }
+    h1 { font-family: 'Great Vibes', cursive; font-size: 2.1em; text-align:center; color:#c71585; margin-bottom:8px; }
+    h2 { font-family: 'Dancing Script', cursive; font-size: 1.52em; color:#c71585; text-align:center; margin:8px 0 10px; }
+    .text { font-family: 'Dancing Script', cursive; font-size: 1.04em; line-height: 1.68; color:#333; flex:1; }
 
     .portada {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, #ff6699, #c71585);
+      background: linear-gradient(#ff4d94, #c71585);
       color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 40;
+      z-index: 30;
       border-radius: 12px;
-      text-align: center;
-      padding: 20px;
     }
 
-    button {
-      padding: 14px 32px;
-      font-size: 1.1em;
-      background: white;
-      color: #c71585;
+    .nav button {
+      position: absolute;
+      bottom: 15px;
+      padding: 10px 24px;
+      background: #ff4d94;
+      color: white;
       border: none;
-      border-radius: 50px;
-      font-weight: bold;
-      margin-top: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      border-radius: 30px;
     }
+    .prev { left: 25px; }
+    .next { right: 25px; }
   </style>
 </head>
 <body>
@@ -113,17 +102,16 @@
   <canvas id="canvas"></canvas>
 
   <div class="notebook">
-    <div class="spiral"></div>
 
     <!-- Portada -->
     <div class="portada" id="portada">
       <h1>Para Mi Amiga</h1>
-      <p style="font-size:1.25em; margin:15px 0 25px;">Hecho especialmente para vos</p>
-      <img src="Foto1.jpg" style="width:75%; border-radius:12px; border:8px solid rgba(255,255,255,0.35);">
-      <button onclick="openBook()">Abrir el Libro ❤️</button>
+      <p style="margin:12px 0 22px;">Con cariño</p>
+      <img src="Foto1.jpg" style="width:70%; border-radius:12px; border:8px solid rgba(255,255,255,0.35);">
+      <button onclick="openBook()" style="margin-top:28px; padding:14px 38px;">Abrir Libro</button>
     </div>
 
-    <!-- Páginas -->
+    <!-- Páginas cuadriculadas -->
     <div class="page left active" id="left1"><h2>Te pido perdón</h2><img src="Foto1.jpg" class="photo"></div>
     <div class="page right active" id="right1"><h2>Te pido perdón</h2><p class="text">Te extraño y quiero que me perdones, sé que soy un pelotudo... pero lo que te dije era todo mentira. Me duele que lo hayas tomado en serio y de verdad te pido perdón 💔</p></div>
 
@@ -135,39 +123,39 @@
 
     <div class="page left" id="left4"><h2>Te admiro</h2><img src="Foto4.jpg" class="photo"></div>
     <div class="page right" id="right4"><h2>Te admiro</h2><p class="text">Admiro lo fuerte que sos. Sos una persona muy trabajadora que, sin importar su situación, siempre sigue adelante. Y aunque tengas bajones, siempre te levantás... eso te hace increíble 💖</p></div>
+
+    <div class="nav">
+      <button class="prev" onclick="prevPage()">← Anterior</button>
+      <button class="next" onclick="nextPage()">Siguiente →</button>
+    </div>
   </div>
 
-  <audio id="music" loop preload="auto">
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
+  <audio id="music" loop><source src="musica.mp3" type="audio/mpeg"></audio>
 
   <script>
-    // Canvas partículas
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
+    });
 
     const particles = [];
     const symbols = ['❤️','💖','🍫','🍭','🍬','🌟'];
-
     class Particle {
       constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height - canvas.height;
-        this.size = Math.random() * 27 + 18;
-        this.speed = Math.random() * 3 + 1.5;
-        this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        this.size = Math.random() * 24 + 15;
+        this.speed = Math.random() * 2.5 + 1.2;
+        this.symbol = symbols[Math.floor(Math.random()*symbols.length)];
       }
-      update() { this.y += this.speed; if (this.y > canvas.height) this.reset(); }
+      update() { this.y += this.speed; if(this.y > canvas.height) this.reset(); }
       draw() { ctx.font = `${this.size}px Arial`; ctx.fillText(this.symbol, this.x, this.y); }
     }
-
     for(let i = 0; i < 45; i++) particles.push(new Particle());
 
     function animate() {
@@ -177,52 +165,43 @@
     }
     animate();
 
-    // Libro
+    let current = 1;
     const music = document.getElementById('music');
 
     function openBook() {
       document.getElementById('portada').style.display = 'none';
-      document.getElementById('left1').classList.add('active');
-      document.getElementById('right1').classList.add('active');
-      music.play().catch(() => console.log("Music autoplay blocked"));
+      music.play().catch(() => {});
     }
-
-    let current = 0;
 
     function nextPage() {
-      current++;
-      if (current === 1) {
-        document.getElementById('left1').classList.remove('active');
-        document.getElementById('right1').classList.remove('active');
-        document.getElementById('left2').classList.add('active');
-        document.getElementById('right2').classList.add('active');
-      } else if (current === 2) {
-        document.getElementById('left2').classList.remove('active');
-        document.getElementById('right2').classList.remove('active');
-        document.getElementById('left3').classList.add('active');
-        document.getElementById('right3').classList.add('active');
-      } else if (current === 3) {
-        document.getElementById('left3').classList.remove('active');
-        document.getElementById('right3').classList.remove('active');
-        document.getElementById('left4').classList.add('active');
-        document.getElementById('right4').classList.add('active');
-      }
+      if (current >= 4) return;
+      document.getElementById(`left${current}`).style.transform = 'rotateY(-160deg)';
+      setTimeout(() => {
+        document.getElementById(`left${current}`).classList.remove('active');
+        document.getElementById(`right${current}`).classList.remove('active');
+        current++;
+        document.getElementById(`left${current}`).classList.add('active');
+        document.getElementById(`right${current}`).classList.add('active');
+        document.getElementById(`left${current}`).style.transform = 'rotateY(0deg)';
+      }, 650);
     }
 
-    // Swipe fácil
-    let startX = 0;
-    const notebook = document.querySelector('.notebook');
-    notebook.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-    notebook.addEventListener('touchend', e => {
-      const diff = startX - e.changedTouches[0].clientX;
-      if (diff > 80) nextPage();
-    });
+    function prevPage() {
+      if (current <= 1) return;
+      document.getElementById(`left${current}`).classList.remove('active');
+      document.getElementById(`right${current}`).classList.remove('active');
+      current--;
+      document.getElementById(`left${current}`).classList.add('active');
+      document.getElementById(`right${current}`).classList.add('active');
+    }
 
-    // Click en cualquier lado del libro para pasar página (más fácil en celular)
-    notebook.addEventListener('click', (e) => {
-      if (e.target.tagName === "BUTTON") return;
-      const rect = notebook.getBoundingClientRect();
-      if (e.clientX > rect.left + rect.width / 2) nextPage();
+    // Swipe
+    let startX = 0;
+    document.querySelector('.notebook').addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    document.querySelector('.notebook').addEventListener('touchend', e => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (diff > 70) nextPage();
+      if (diff < -70) prevPage();
     });
   </script>
 </body>
